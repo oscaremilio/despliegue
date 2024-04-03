@@ -17,3 +17,6 @@ let libroSchema = new mongoose.Schema({
         min: 0,
     }
 });
+
+let Libro = mongoose.model("libros", libroSchema);
+module.exports = Libro;
