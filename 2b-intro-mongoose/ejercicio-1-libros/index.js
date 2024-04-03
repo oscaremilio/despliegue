@@ -3,6 +3,7 @@ const Libro = require(__dirname + "/models/libro");
 
 mongoose.connect("mongodb://127.0.0.1:27017/libros");
 
+// Inserciones
 /*
 let libro1 = new Libro({
     titulo: "El capitán Alatriste",
@@ -38,3 +39,18 @@ libro2.save().then(
         console.log("ERROR añadiendo contacto:", error)
 });
 */
+
+// 2 búsquedas
+// Búsqueda parametrizada
+Libro.find({precio:{$gte:10, $lte: 20}}).then( resultado => {
+    console.log("Resultado de la búsqueda:", resultado);
+}).catch(error => {
+    console.log("ERROR:", error);
+});
+
+// Búsqueda por "id"
+Libro.findById("660d7c7b44b2a853b838d2de").then(resultado => {
+    console.log("Resultado de la búsqueda:", resultado);
+}).catch(error => {
+    console.log("ERROR:", error);
+});
