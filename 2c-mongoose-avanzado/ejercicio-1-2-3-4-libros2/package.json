@@ -1,0 +1,14 @@
+{
+  "name": "ejercicio-1-libros",
+  "version": "1.0.0",
+  "description": "Inicio del proyecto \"LibrosMongo\", que conecta a una base de datos llamada \"libros\", en el servidor Mongo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Óscar Benítez",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.2.4"
+  }
+}
