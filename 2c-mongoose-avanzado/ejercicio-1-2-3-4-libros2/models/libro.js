@@ -1,5 +1,22 @@
 const mongoose = require("mongoose");
 
+let comentarioSchema = new mongoose.Schema({
+    fecha: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    nick: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    comentario: {
+        type: String,
+        required: true
+    }
+});
+
 let libroSchema = new mongoose.Schema({
     titulo: {
         type: String,
@@ -19,7 +36,8 @@ let libroSchema = new mongoose.Schema({
     autor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "autores"
-    }
+    },
+    comentarios: [comentarioSchema]
 });
 
 let Libro = mongoose.model("libros", libroSchema);

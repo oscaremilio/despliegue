@@ -114,6 +114,7 @@ autor2.save().then(
 */
 
 // Añade dos libros (ahora con el auto) y los graba
+/*
 let libro1= new Libro({
     titulo: "Dune",
     editorial: "Alfaguara",
@@ -135,6 +136,30 @@ let libro2 = new Libro({
     autor: "6618080a9a3fd9aea2418309"
 });
 libro2.save().then(
+    resultado => {
+        console.log("Libro añadido:", resultado)
+}).catch(
+    error => {
+        console.log("ERROR añadiendo contacto:", error)
+});
+*/
+
+let libro1 = new Libro({
+    titulo: "El Mesías de Dune",
+    editorial: "Planeta",
+    precio: 24,
+    autor: "6618080a9a3fd9aea2418308",
+});
+libro1.comentarios.push({
+    nick: "MaestroCiego",
+    comentario: "Una segunda parte muy interesante"
+});
+libro1.comentarios.push({
+    nick: "La Botella de Kandor",
+    comentario: "Una segunda parte aceptable"
+});
+
+libro1.save().then(
     resultado => {
         console.log("Libro añadido:", resultado)
 }).catch(
