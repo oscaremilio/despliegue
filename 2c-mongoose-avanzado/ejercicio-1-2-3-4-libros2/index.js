@@ -183,6 +183,7 @@ Libro.find().populate("autor").populate("comentarios").then( resultado => {
 // Muestra únicamente los nombres de los autores con libro de menos de 10 €
 Libro.find({precio: {$lt: 10}}).then(resultadoLibros => {
     let idsAutores = resultadoLibros.map(libro => libro.autor);
+    // No muestra en pantala los campos siguientes: id, nacimiento, y versión
     Autor.find({_id: {$in: idsAutores}}, {_id: 0, nacimiento: 0, __v: 0}).then(resultadoFinal => {
         console.log("Autores con libros de menos de 10 €:", resultadoFinal);
     })
