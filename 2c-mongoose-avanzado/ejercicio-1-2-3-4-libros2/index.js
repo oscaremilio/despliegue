@@ -144,6 +144,8 @@ libro2.save().then(
 });
 */
 
+//Código del ejercicio 2
+/*
 let libro1 = new Libro({
     titulo: "El Mesías de Dune",
     editorial: "Planeta",
@@ -166,3 +168,25 @@ libro1.save().then(
     error => {
         console.log("ERROR añadiendo contacto:", error)
 });
+*/
+
+// Prueba de listado completo con el método populate y el método stringify 
+/*
+Libro.find().populate("autor").populate("comentarios").then( resultado => {
+    console.log("Listado completo de libros:", JSON.stringify(resultado, null, 1));
+}).catch(error => {
+    console.log("ERROR:", error);
+});
+*/
+
+// Código del ejercicio 3
+// Muestra únicamente los nombres de los autores con libro de menos de 10 €
+Libro.find({precio: {$lt: 10}}).then(resultadoLibros => {
+    let idsAutores = resultadoLibros.map(libro => libro.autor);
+    Autor.find({_id: {$in: idsAutores}}, {_id: 0, nacimiento: 0, __v: 0}).then(resultadoFinal => {
+        console.log("Autores con libros de menos de 10 €:", resultadoFinal);
+    })
+}).catch(error => {
+    console.log("ERROR:", error);
+});
+
