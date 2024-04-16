@@ -1,0 +1,14 @@
+{
+  "name": "gestionhotelera",
+  "version": "1.0.0",
+  "description": "Practica del módulo Despliegue de Aplicaciones Web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Óscar Benítez",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.3.1"
+  }
+}
