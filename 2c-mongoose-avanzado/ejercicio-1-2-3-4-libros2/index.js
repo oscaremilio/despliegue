@@ -181,6 +181,7 @@ Libro.find().populate("autor").populate("comentarios").then( resultado => {
 
 // Código del ejercicio 3
 // Muestra únicamente los nombres de los autores con libro de menos de 10 €
+/*
 Libro.find({precio: {$lt: 10}}).then(resultadoLibros => {
     let idsAutores = resultadoLibros.map(libro => libro.autor);
     // No muestra en pantala los campos siguientes: id, nacimiento, y versión
@@ -190,4 +191,11 @@ Libro.find({precio: {$lt: 10}}).then(resultadoLibros => {
 }).catch(error => {
     console.log("ERROR:", error);
 });
+*/
 
+// Código del ejercicio 4
+Libro.find().select("titulo precio").sort("precio").limit(3).then(resultado => {
+    console.log(resultado);
+}).catch(error => {
+    console.log("ERROR:", error);
+});
