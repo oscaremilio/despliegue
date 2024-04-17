@@ -1,0 +1,14 @@
+{
+  "name": "ejercicio-1",
+  "version": "1.0.0",
+  "description": "Ejercicio 1 del pdf \"3b-Introducción a Express\".",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Óscar Benítez",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
