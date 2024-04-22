@@ -55,6 +55,21 @@ app.post("/libros", (req, res) => {
     });
 });
 
+// Añade el servicio PUT para modificar un libro por su id
+app.put("/libros/:id", (req, res) => {
+    Libro.findByIdAndUpdate(req.params.id, {
+        $set: {
+            titulo: req.body.titulo,
+            editorial: req.body.editorial,
+            precio: req.body.precio
+        }
+    }, {new: true}).then(resultado => {
+        res.status(200).send({ok: true, resultado: resultado});
+    }).catch(error => {
+        res.status(400).send({ok: false, error: "Error actualizando libro"});
+    });
+});
+
 // Se pone a escuchar por el puerto 8080
 app.listen(8080);
 
