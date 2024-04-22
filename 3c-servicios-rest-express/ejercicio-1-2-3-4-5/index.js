@@ -11,6 +11,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/libros2");
 // Crea una instancia de Express
 let app = express();
 
+// Añade un middleware para trabajar con objetos JSON en el servidor Express
+app.use(express.json());
+
 // Crea un servicio GET que devuelve el listado completo de libros
 app.get("/libros", (req, res) => {
     Libro.find()
@@ -36,6 +39,19 @@ app.get("/libros/:id", (req, res) => {
         }
     }).catch(error => {
         res.status(400).send({ok: false, error: "Error buscando el libro indicado"});
+    });
+});
+
+// Añade el servicio POST para insertar un nuevo libro
+app.post("/libros", (req, res) => {
+    let nuevoLibro = new Libro({
+        titulo: req.body.titulo,
+        precio: req.body.precio,
+    });
+    nuevoLibro.save().then(resultado => {
+        res.status(200).send({ok: true, resultado: resultado});
+    }).catch(error => {
+        res.status(400).send({ok: false, error: "Error añadiendo libro"});
     });
 });
 
