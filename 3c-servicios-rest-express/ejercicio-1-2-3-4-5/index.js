@@ -70,6 +70,15 @@ app.put("/libros/:id", (req, res) => {
     });
 });
 
+// Añade el servicio DELETE para borrar un libro por su id
+app.delete("/libros/:id", (req, res) => {
+    Libro.findByIdAndDelete(req.params.id).then(resultado => {
+        res.status(200).send({ok: true, resultado: resultado});
+    }).catch(error => {
+        res.status(400).send({ok: false, error: "Error eliminando libro"});
+    });
+});
+
 // Se pone a escuchar por el puerto 8080
 app.listen(8080);
 
