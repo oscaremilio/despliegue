@@ -73,7 +73,12 @@ app.put("/libros/:id", (req, res) => {
 // Añade el servicio DELETE para borrar un libro por su id
 app.delete("/libros/:id", (req, res) => {
     Libro.findByIdAndDelete(req.params.id).then(resultado => {
-        res.status(200).send({ok: true, resultado: resultado});
+        if (resultado) {
+            res.status(200).send({ok: true, resultado: resultado}); 
+        } else {
+            res.status(400).send({ok: false, error: "No se ha encontrado el contacto"});
+        }
+        
     }).catch(error => {
         res.status(400).send({ok: false, error: "Error eliminando libro"});
     });
