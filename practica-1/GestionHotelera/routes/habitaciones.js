@@ -102,11 +102,7 @@ router.delete('/habitaciones/:id', (req, res) => {
 
 // Añade una incidencia en una habitación
 router.post('/habitaciones/:id/incidencias', (req, res) => {
-
-    let nuevaIncidencia = new ({
-        descripcion: "",
-            type: Date
-    });
+// TODO: Añadir la incidencia
 
     nuevaHabitacion.save().then(resultado => {
         res.status(200)
@@ -116,6 +112,21 @@ router.post('/habitaciones/:id/incidencias', (req, res) => {
            .send({ok: false, 
                   error: "Error insertando la habitación"});
     });
+});
+
+// Actualiza el estado de una incidencia de una habitación
+router.put("/habitaciones/:idH/incidencias/:idI", (req, res) => {
+    // TODO:
+});
+
+// Actualizar última limpieza
+router.put("/habitaciones/:id/ultimaLimpieza", (req, res) => {
+    // TODO:
+});
+
+// Actualizar TODAS las últimas limpiezas
+router.put("/habitaciones/ultimaLimpieza", (req, res) => {
+    // TODO:
 });
 
 module.exports = router;
