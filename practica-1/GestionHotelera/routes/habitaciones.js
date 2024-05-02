@@ -112,15 +112,13 @@ router.delete('/habitaciones/:id', (req, res) => {
 
 // Añade una incidencia en una habitación
 router.post('/habitaciones/:id/incidencias', async (req, res) => {
+
     let habitacion = await Habitacion.findById(req.params.id);
     habitacion.save().then(resultado => {
         res.status(200).send({ ok: true, resultado: resultado });
     }).catch(error => {
-        res.status(400)
-            .send({
-                ok: false,
-                error: "Error añadiendo la incidencia"
-            });
+        res.status(400).send({ok: false, error: "Error añadiendo la incidencia"});
+    });
 });
 
 // Actualiza el estado de una incidencia de una habitación
@@ -147,9 +145,14 @@ router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
 });
 
 // Actualizar TODAS las últimas limpiezas
-router.put("/habitaciones/ultimalimpieza", (req, res) => {
-    // TODO:
+router.put("/habitaciones/ultimalimpieza", async (req, res) => {
     // SE PUEDE ELIMINAR Y NO ENTREGAR
+    let habitacion = await Habitacion.findById(req.params.id);
+    cursor = Limpieza.find();
+    while (cursor.hasNext()) {
+        document = cursor.next();
+        res.status(200).send({ ok: true, resultado: document });
+    } 
 });
 
 module.exports = router;
