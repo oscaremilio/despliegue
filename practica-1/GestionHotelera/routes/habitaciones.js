@@ -9,33 +9,37 @@ const express = require("express");
 const router = express.Router();
 
 // Incorpora los modelos de datos
-const Habitacion = require(__dirname + "./models/habitacion.js");
+const Habitacion = require(__dirname + "/../models/habitacion.js");
 
 // Obtiene el listado completo de todas las habitaciones del hotel
 router.get("/habitaciones", (req, res) => {
     Habitacion.find()
-    .then(resultado => {
-            res.status(200).send({ok:true, resultado: resultado});
-    }).catch(error => {
-        res.status(500).send({ok: false, error: "No hay habitaciones registradas en la aplicación"});
-    });
+        .then(resultado => {
+            res.status(200).send({ ok: true, resultado: resultado });
+        }).catch(error => {
+            res.status(500).send({ ok: false, error: "No hay habitaciones registradas en la aplicación" });
+        });
 });
 
 // Obtiene los detalles de una habitación concreta por su id
 router.get('/habitaciones/:id', (req, res) => {
     Habitacion.findById(req.params.id).then(resultado => {
-        if(resultado)
+        if (resultado)
             res.status(200)
-               .send({ok: true, resultado: resultado});
+                .send({ ok: true, resultado: resultado });
         else
             res.status(400)
-               .send({ok: false, 
-                      error: "No se han encontrado habitaciones"});
-    }).catch (error => {
+                .send({
+                    ok: false,
+                    error: "No se han encontrado habitaciones"
+                });
+    }).catch(error => {
         res.status(400)
-           .send({ok: false, 
-                  error: "No existe el número de habitación"});
-    }); 
+            .send({
+                ok: false,
+                error: "No existe el número de habitación"
+            });
+    });
 });
 
 // Añade una habitación al listado
@@ -51,11 +55,13 @@ router.post('/habitaciones', (req, res) => {
 
     nuevaHabitacion.save().then(resultado => {
         res.status(200)
-           .send({ok: true, resultado: resultado});
+            .send({ ok: true, resultado: resultado });
     }).catch(error => {
         res.status(400)
-           .send({ok: false, 
-                  error: "Error insertando la habitación"});
+            .send({
+                ok: false,
+                error: "Error insertando la habitación"
+            });
     });
 });
 
@@ -70,16 +76,18 @@ router.put('/habitaciones/:id', (req, res) => {
             ultimaLimpieza: req.body.ultimaLimpieza,
             precio: req.body.precio
         }
-    }, {new: true}).then(resultado => {
+    }, { new: true }).then(resultado => {
         if (resultado) {
-            res.status(200).send({ok: true, resultado: resultado});
+            res.status(200).send({ ok: true, resultado: resultado });
         } else {
-            res.status(400).send({ok: false, error: "Error actualizando los datos de la habitación"});
+            res.status(400).send({ ok: false, error: "Error actualizando los datos de la habitación" });
         }
     }).catch(error => {
         res.status(400)
-           .send({ok: false, 
-                  error:"Error actualizando los datos de la habitación"});
+            .send({
+                ok: false,
+                error: "Error actualizando los datos de la habitación"
+            });
     });
 });
 
@@ -87,46 +95,61 @@ router.put('/habitaciones/:id', (req, res) => {
 router.delete('/habitaciones/:id', (req, res) => {
 
     Habitacion.findByIdAndRemove(req.params.id)
-    .then(resultado => {
-        if (resultado) {
-            res.status(200).send({ok: true, resultado: resultado});
-        } else {
-            res.status(400).send({ok: false, error: "Error eliminando la habitación"});
-        }
-    }).catch(error => {
-        res.status(400)
-           .send({ok: false, 
-                  error:"Error eliminando la habitación"});
-    });
+        .then(resultado => {
+            if (resultado) {
+                res.status(200).send({ ok: true, resultado: resultado });
+            } else {
+                res.status(400).send({ ok: false, error: "Error eliminando la habitación" });
+            }
+        }).catch(error => {
+            res.status(400)
+                .send({
+                    ok: false,
+                    error: "Error eliminando la habitación"
+                });
+        });
 });
 
 // Añade una incidencia en una habitación
-router.post('/habitaciones/:id/incidencias', (req, res) => {
-// TODO: Añadir la incidencia
-
-    nuevaHabitacion.save().then(resultado => {
-        res.status(200)
-           .send({ok: true, resultado: resultado});
+router.post('/habitaciones/:id/incidencias', async (req, res) => {
+    let habitacion = await Habitacion.findById(req.params.id);
+    habitacion.save().then(resultado => {
+        res.status(200).send({ ok: true, resultado: resultado });
     }).catch(error => {
         res.status(400)
-           .send({ok: false, 
-                  error: "Error insertando la habitación"});
-    });
+            .send({
+                ok: false,
+                error: "Error añadiendo la incidencia"
+            });
 });
 
 // Actualiza el estado de una incidencia de una habitación
-router.put("/habitaciones/:idH/incidencias/:idI", (req, res) => {
-    // TODO:
+router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
+    let habitacion = await Habitacion.findById(req.params.idH);
+    let incidencia = habitacion.incidencias.filter(i => i._id == req.params.idI);
+    incidencia[0].fin = Date.now();
+    habitacion.save().then(resultado => {
+        res.status(200).send({ ok: true, resultado: resultado });
+    }).catch(error => {
+        res.status(400).send({ ok: false, error: "Incidencia no encontrada"});
+    });
 });
-
 // Actualizar última limpieza
-router.put("/habitaciones/:id/ultimaLimpieza", (req, res) => {
-    // TODO:
+router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
+    let habitacion = await Habitacion.findById(req.params.id);
+    let limpiezas = await Limpieza.find({ habitacion: req.params.id }).sort('-fechaHora');
+    habitacion.ultimaLimpieza = limpiezas[0].fechaHora;
+    habitacion.save().then(resultado => {
+        res.status(200).send({ ok: true, resultado: resultado });
+    }).catch(error => {
+        res.status(400).send({ ok: false, error: "Error actualizando limpieza" }) 
+    });
 });
 
 // Actualizar TODAS las últimas limpiezas
-router.put("/habitaciones/ultimaLimpieza", (req, res) => {
+router.put("/habitaciones/ultimalimpieza", (req, res) => {
     // TODO:
+    // SE PUEDE ELIMINAR Y NO ENTREGAR
 });
 
 module.exports = router;
