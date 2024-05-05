@@ -127,7 +127,7 @@ router.post('/habitaciones/:id/incidencias', async (req, res) => {
 router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.idH);
     let incidencia = habitacion.incidencias.filter(i => i._id == req.params.idI);
-    incidencia[0].fin = Date.now();
+    incidencia[0].fechaFin = Date.now();
     habitacion.save().then(resultado => {
         res.status(200).send({ ok: true, resultado: resultado });
     }).catch(error => {
