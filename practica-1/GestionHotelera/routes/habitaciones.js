@@ -76,7 +76,7 @@ router.put('/habitaciones/:id', (req, res) => {
             ultimaLimpieza: req.body.ultimaLimpieza,
             precio: req.body.precio
         }
-    }, { new: true }).then(resultado => {
+    }, { new: true, runValidators: true}).then(resultado => {
         if (resultado) {
             res.status(200).send({ ok: true, resultado: resultado });
         } else {
@@ -94,7 +94,7 @@ router.put('/habitaciones/:id', (req, res) => {
 // Elimina una habitación
 router.delete('/habitaciones/:id', (req, res) => {
 
-    Habitacion.findByIdAndRemove(req.params.id)
+    Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {
             if (resultado) {
                 res.status(200).send({ ok: true, resultado: resultado });
