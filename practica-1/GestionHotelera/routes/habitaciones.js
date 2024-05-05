@@ -14,6 +14,7 @@ const Habitacion = require(__dirname + "/../models/habitacion.js");
 // Obtiene el listado completo de todas las habitaciones del hotel
 router.get("/habitaciones", (req, res) => {
     Habitacion.find()
+        .populate("incidencias")
         .then(resultado => {
             res.status(200).send({ ok: true, resultado: resultado });
         }).catch(error => {
@@ -114,6 +115,7 @@ router.delete('/habitaciones/:id', (req, res) => {
 router.post('/habitaciones/:id/incidencias', async (req, res) => {
 
     let habitacion = await Habitacion.findById(req.params.id);
+    habitacion.incidencias.push({descripcion: req.body.descripcion});
     habitacion.save().then(resultado => {
         res.status(200).send({ ok: true, resultado: resultado });
     }).catch(error => {
