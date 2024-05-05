@@ -26,7 +26,9 @@ let habitacionSchema = new mongoose.Schema({
         max: 100
     },
     tipo: {
-        enum: ["individual", "doble", "familiar", "suite"]
+        type: String,
+        required: true,
+        enum: ["individual", "doble", "familiar", "suite"],
     },
     descripcion: {
         type: String,
