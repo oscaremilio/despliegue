@@ -149,15 +149,4 @@ router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
     });
 });
 
-// Actualizar TODAS las últimas limpiezas
-router.put("/habitaciones/ultimalimpieza", async (req, res) => {
-    // SE PUEDE ELIMINAR Y NO ENTREGAR
-    let habitacion = await Habitacion.findById(req.params.id);
-    cursor = Limpieza.find();
-    while (cursor.hasNext()) {
-        document = cursor.next();
-        res.status(200).send({ ok: true, resultado: document });
-    } 
-});
-
 module.exports = router;
