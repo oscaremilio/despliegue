@@ -134,6 +134,7 @@ router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
         res.status(400).send({ ok: false, error: "Incidencia no encontrada"});
     });
 });
+
 // Actualizar última limpieza
 router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.id);

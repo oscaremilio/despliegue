@@ -12,8 +12,8 @@ const router = express.Router();
 const Limpieza = require(__dirname + "/../models/limpieza.js");
 
 // Obtener limpiezas de una habitación
-router.get("/limpiezas/:id", (req, res) => {
-    Limpieza.find()
+router.get("/limpiezas/:id", async (req, res) => {
+    Limpieza.find({ idHabitacion: req.params.id }).sort('-fechaHora')
         .then(resultado => {
             res.status(200).send({ ok: true, resultado: resultado });
         }).catch(error => {
@@ -46,8 +46,22 @@ router.get("/limpiezas/:id/estadolimpieza", async (req, res) => {
 });
 
 // Actualizar limpieza
-router.post("/limpiezas/:id", (req, res) => {
-    // TODO:
+router.post("/limpiezas/:id", async (req, res) => {
+    let nuevaLimpieza = new Limpieza({
+        idHabitacion: req.params.id,
+        observaciones: req.body.observaciones
+    });
+
+    nuevaLimpieza.save().then(resultado => {
+        res.status(200)
+            .send({ ok: true, resultado: resultado });
+    }).catch(error => {
+        res.status(400)
+            .send({
+                ok: false,
+                error: "Error actualizando limpieza"
+            });
+    });
 });
 
 module.exports = router;
