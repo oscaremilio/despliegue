@@ -9,7 +9,9 @@ const express = require("express");
 const router = express.Router();
 
 // Incorpora los modelos de datos
+// Añade limpieza.js para el servicio put("/habitaciones/:id/ultimalimpieza"
 const Habitacion = require(__dirname + "/../models/habitacion.js");
+const Limpieza = require(__dirname + "/../models/limpieza.js");
 
 // Obtiene el listado completo de todas las habitaciones del hotel
 router.get("/habitaciones", (req, res) => {
@@ -138,7 +140,7 @@ router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
 // Actualizar última limpieza
 router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.id);
-    let limpiezas = await Limpieza.find({ habitacion: req.params.id }).sort('-fechaHora');
+    let limpiezas = await Limpieza.find({ idHabitacion: req.params.id }).sort("-fechaHora");
     habitacion.ultimaLimpieza = limpiezas[0].fechaHora;
     habitacion.save().then(resultado => {
         res.status(200).send({ ok: true, resultado: resultado });
