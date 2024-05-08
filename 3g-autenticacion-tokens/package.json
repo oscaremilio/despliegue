@@ -1,0 +1,15 @@
+{
+  "name": "ejercicio-1-2-3-4-5",
+  "version": "1.0.0",
+  "description": "Libros2 con REST",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.2"
+  }
+}
