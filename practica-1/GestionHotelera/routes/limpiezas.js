@@ -8,6 +8,9 @@ const express = require("express");
 
 const router = express.Router();
 
+// Función y enrutador necesarios
+const { protegerRuta } = require("../auth/auth");
+
 // Incorpora los modelos de datos
 const Limpieza = require(__dirname + "/../models/limpieza.js");
 
@@ -46,7 +49,7 @@ router.get("/limpiezas/:id/estadolimpieza", async (req, res) => {
 });
 
 // Actualizar limpieza
-router.post("/limpiezas/:id", async (req, res) => {
+router.post("/limpiezas/:id", protegerRuta, async (req, res) => {
     let nuevaLimpieza = new Limpieza({
         idHabitacion: req.params.id,
         observaciones: req.body.observaciones

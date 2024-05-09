@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const secreto = "secretoNode";
 
 // Función que genera un token dados un login y rol válidos del usuario
-let generarToken = login => jwt.sign({ login: login, rol: rol }, secreto, { expiresIn: "2 hours" })
+let generarToken = login => jwt.sign({ login: login}, secreto, { expiresIn: "2 hours" })
 
 // Función que valida el token que se reciba
 let validarToken = token => {
@@ -24,7 +24,7 @@ let protegerRuta = rol => {
         if (token) {
             token = token.substring(7);
             let resultado = validarToken(token);
-            if (resultado && (rol === "" || rol === resultado.rol))
+            if (resultado && (login === "" || login === resultado.login))
                 next();
             else
                 res.send({ ok: false, error: "Usuario no autorizado" });
