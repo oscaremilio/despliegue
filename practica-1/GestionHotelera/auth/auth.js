@@ -18,20 +18,30 @@ let validarToken = token => {
 }
 
 // Función que protege una ruta si se tiene el token válido
-let protegerRuta = rol => {
+let protegerRuta = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token && token.startsWith("Bearer "))
+    token = token.slice(7);
+    if (validarToken(token))
+    next();
+    else
+    res.send({ok: false, error: "Usuario no autorizado"});
+    }
+
+/*let protegerRuta = login => {
     return (req, res, next) => {
         let token = req.headers['authorization'];
         if (token) {
             token = token.substring(7);
             let resultado = validarToken(token);
-            if (resultado && (login === "" || login === resultado.login))
+            if (resultado)
                 next();
             else
                 res.send({ ok: false, error: "Usuario no autorizado" });
         } else
             res.send({ ok: false, error: "Usuario no autorizado" });
     }
-};
+};*/
 
 module.exports = {
     generarToken: generarToken,

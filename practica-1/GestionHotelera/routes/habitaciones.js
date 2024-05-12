@@ -8,6 +8,7 @@ const express = require("express");
 
 // Función y enrutador necesarios
 const { protegerRuta } = require("../auth/auth");
+const auth = require("../auth/auth");
 
 const router = express.Router();
 
