@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const secreto = "secretoNode";
 
 // Función que genera un token dados un login y rol válidos del usuario
-let generarToken = login => jwt.sign({ login: login}, secreto, { expiresIn: "2 hours" })
+let generarToken = login => jwt.sign({ login: login }, secreto, { expiresIn: "2 hours" })
 
 // Función que valida el token que se reciba
 let validarToken = token => {
@@ -20,31 +20,18 @@ let validarToken = token => {
 // Función que protege una ruta si se tiene el token válido
 let protegerRuta = (req, res, next) => {
     let token = req.headers['authorization'];
-    if (token && token.startsWith("Bearer "))
-    token = token.slice(7);
-    if (validarToken(token))
-    next();
-    else
-    res.send({ok: false, error: "Usuario no autorizado"});
+    if (token && token.startsWith("Bearer ")) {
+        token = token.slice(7);
     }
-
-/*let protegerRuta = login => {
-    return (req, res, next) => {
-        let token = req.headers['authorization'];
-        if (token) {
-            token = token.substring(7);
-            let resultado = validarToken(token);
-            if (resultado)
-                next();
-            else
-                res.send({ ok: false, error: "Usuario no autorizado" });
-        } else
-            res.send({ ok: false, error: "Usuario no autorizado" });
+    if (validarToken(token)) {
+        next();
+    } else {
+        res.send({ ok: false, error: "Usuario no autorizado" });
     }
-};*/
+}
 
 module.exports = {
     generarToken: generarToken,
     validarToken: validarToken,
-    protegerRuta: protegerRuta
+    protegerRuta: protegerRuta,
 };
