@@ -1,5 +1,5 @@
 {
-  "name": "ejercicio-1-2-3-4-5",
+  "name": "ejericicio-1-libros-web",
   "version": "1.0.0",
   "description": "Libros2 con REST",
   "main": "index.js",
@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "express": "^4.19.2",
-    "mongoose": "^8.3.2"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.2",
+    "nunjucks": "^3.2.4"
   }
 }

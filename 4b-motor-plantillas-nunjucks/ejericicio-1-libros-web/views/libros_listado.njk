@@ -1,0 +1,29 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Libros | Listado{% endblock %}
+
+{% block contenido %}
+
+    <h1>Listado de libros</h1>
+        {% for libro in libros %}
+            <div class="container">
+                <ul>
+                    <div class="row align-items-start m-1">
+                         <div class="col">
+                            {% if loop.index % 2 == 0 %}
+                                <li class="list-group-item bg-secondary">
+                            {% else %}
+                                <li class="list-group-item bg-light">
+                            {% endif %}
+                                    {{ libro.titulo }} 
+                                </li>
+                            </div>
+                        <div class="col">
+                            <a class="text-end btn btn-success m-1" href="/libros/{{ libro.id }}">Ver ficha</a>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}
