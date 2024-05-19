@@ -1,0 +1,40 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Libros | Listado{% endblock %}
+
+{% block contenido %}
+
+    <h1>Listado de libros</h1>
+        {% for libro in libros %}
+            <div class="container">
+                <ul>
+                    <div class="row align-items-start m-1">
+                         <div class="col">
+                            {% if loop.index % 2 == 0 %}
+                                <li class="list-group-item bg-secondary">
+                            {% else %}
+                                <li class="list-group-item bg-light">
+                            {% endif %}
+                                    {{ libro.titulo }} 
+                                </li>
+                            </div>
+                        <div class="col">
+                            <a class="text-end btn btn-success" href="/libros/{{ libro.id }}">Ver ficha</a>
+                        </div>
+                        <div class="col">
+                            <form action="/libros/{{ libro.id }}" method="post">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit" class="btn btn-danger">
+                                    Borrar
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <a class="text-end btn btn-warning" href="/libros/editar/{{ libro.id }}">Editar</a>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}
