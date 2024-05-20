@@ -20,8 +20,8 @@ let comentarioSchema = new mongoose.Schema({
 let libroSchema = new mongoose.Schema({
     titulo: {
         type: String,
-        required: true,
-        minlength: 3,
+        required: [true, "El título del libro es obligatorio"],
+        minlength: [3, "El nombre del libro es demasiado corto"],
         trim: true
     },
     editorial: {
@@ -30,7 +30,7 @@ let libroSchema = new mongoose.Schema({
     },
     precio: {
         type: Number,
-        required: true,
+        required: [true, "El precio del libro es obligatorio"],
         min: 0,
     },
     autor: {
