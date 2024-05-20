@@ -1,14 +1,30 @@
 // Añade las librerías necesarias
 const mongoose = require("mongoose");
 const express = require("express");
+const nunjucks = require('nunjucks');
+
+// Crea una instancia de Express
+app = express();
 
 // Incorpora los modelos de datos
 const Habitacion = require(__dirname + "/models/habitacion");
 const Limpieza = require(__dirname + "/models/limpieza");
 const Usuario = require(__dirname + "/models/usuario");
 
-// Conexión a la base de datos "hotel"
+// Conecta con la base de datos "hotel"
 mongoose.connect("mongodb://127.0.0.1:27017/hotel");
+
+// Configura el motor Nunjucks
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
+
+// Asigna el motor de plantillas
+app.set('view engine', 'njk');
+
+// Permite usar archivos estáticos 
+app.use(express.static('public'));
 
 // Enrutadores
 const habitaciones = require(__dirname + "/routes/habitaciones.js");
@@ -16,13 +32,12 @@ const limpiezas = require(__dirname + "/routes/limpiezas.js");
 const usuarios = require(__dirname + "/routes/usuarios.js");
 
 
-// Crea una instancia de Express
-app = express();
 
 // Middleware para peticiones
 app.use(express.json());
 
-// Enrutamiento
+// Permite acceder a la carpeta donde está disponible el CSS de Bootstrap 
+app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 
 // Enrutadores para cada grupo de rutas
 app.use("/", habitaciones);
