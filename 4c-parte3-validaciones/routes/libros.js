@@ -55,16 +55,26 @@ router.get("/libros/:id", (req, res) => {
 
 // Añade el servicio POST para insertar un nuevo libro con datos del formulario
 router.post("/libros", upload.single("portada"), (req, res) => {
+    let portada = req.file ? req.file.filename : '';
     let nuevoLibro = new Libro({
         titulo: req.body.titulo,
         editorial: req.body.editorial,
         precio: req.body.precio,
-        portada: req.file.filename
+        portada: portada
     });
     nuevoLibro.save().then(resultado => {
         res.redirect("/libros");
     }).catch(error => {
-        res.render("error", {error: "Error añadiendo libro"});
+        let errores = Object.keys(error.errors);
+        let mensaje = "";
+        if(errores.length > 0) {
+            errores.forEach(clave => {
+                mensaje += "<p>" + error.errors[clave].message + "</p>";
+            });
+        } else {
+            mensaje = "Error añadiendo libro";
+        }
+        res.render('error', {error: mensaje});
     });
 });
 
