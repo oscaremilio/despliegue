@@ -46,7 +46,7 @@ router.get("/limpiezas/:id/estadolimpieza", async (req, res) => {
 });
 
 // Actualizar limpieza
-router.post("/limpiezas/:id", protegerRuta, async (req, res) => {
+router.post("/limpiezas/:id", async (req, res) => {
     let nuevaLimpieza = new Limpieza({
         idHabitacion: req.params.id,
         observaciones: req.body.observaciones

@@ -47,7 +47,7 @@ router.get('/habitaciones/:id', (req, res) => {
 });
 
 // Añade una habitación al listado
-router.post('/habitaciones', protegerRuta, (req, res) => {
+router.post('/habitaciones', (req, res) => {
 
     let nuevaHabitacion = new Habitacion({
         numero: req.body.numero,
@@ -70,7 +70,7 @@ router.post('/habitaciones', protegerRuta, (req, res) => {
 });
 
 // Actualiza los datos de una habitación
-router.put('/habitaciones/:id', protegerRuta, (req, res) => {
+router.put('/habitaciones/:id', (req, res) => {
 
     Habitacion.findByIdAndUpdate(req.params.id, {
         $set: {
@@ -96,7 +96,7 @@ router.put('/habitaciones/:id', protegerRuta, (req, res) => {
 });
 
 // Elimina una habitación
-router.delete('/habitaciones/:id', protegerRuta, (req, res) => {
+router.delete('/habitaciones/:id', (req, res) => {
 
     Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {
@@ -115,7 +115,7 @@ router.delete('/habitaciones/:id', protegerRuta, (req, res) => {
 });
 
 // Añade una incidencia en una habitación
-router.post('/habitaciones/:id/incidencias', protegerRuta, async (req, res) => {
+router.post('/habitaciones/:id/incidencias', async (req, res) => {
 
     let habitacion = await Habitacion.findById(req.params.id);
     habitacion.incidencias.push({descripcion: req.body.descripcion});
@@ -127,7 +127,7 @@ router.post('/habitaciones/:id/incidencias', protegerRuta, async (req, res) => {
 });
 
 // Actualiza el estado de una incidencia de una habitación
-router.put("/habitaciones/:idH/incidencias/:idI", protegerRuta, async (req, res) => {
+router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.idH);
     let incidencia = habitacion.incidencias.filter(i => i._id == req.params.idI);
     incidencia[0].fechaFin = Date.now();
@@ -139,7 +139,7 @@ router.put("/habitaciones/:idH/incidencias/:idI", protegerRuta, async (req, res)
 });
 
 // Actualizar última limpieza
-router.put("/habitaciones/:id/ultimalimpieza", protegerRuta, async (req, res) => {
+router.put("/habitaciones/:id/ultimalimpieza", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.id);
     let limpiezas = await Limpieza.find({ idHabitacion: req.params.id }).sort("-fechaHora");
     habitacion.ultimaLimpieza = limpiezas[0].fechaHora;
