@@ -18,11 +18,11 @@ const Limpieza = require(__dirname + "/../models/limpieza.js");
 router.get("/habitaciones", (req, res) => {
     Habitacion.find()
         .populate("incidencias")
-        .then(resultado => {
-            res.status(200).send({ ok: true, resultado: resultado });
-        }).catch(error => {
-            res.status(500).send({ ok: false, error: "No hay habitaciones registradas en la aplicación" });
-        });
+        .then( resultado => {
+            res.render("habitaciones_listado", {habitaciones: resultado});
+    }).catch(error => {
+        res.render("error", {error: "No hay habitaciones registradas en la aplicación"});
+    });
 });
 
 // Obtiene los detalles de una habitación concreta por su id
