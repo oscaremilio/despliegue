@@ -26,8 +26,7 @@ let libroSchema = new mongoose.Schema({
     },
     editorial: {
         type: String,
-        trim: true,
-        
+        trim: true,    
     },
     precio: {
         type: Number,

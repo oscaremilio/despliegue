@@ -60,12 +60,16 @@ router.post("/libros", upload.single("portada"), (req, res) => {
         titulo: req.body.titulo,
         editorial: req.body.editorial,
         precio: req.body.precio,
-        portada: portada
+        portada: portada,
     });
     nuevoLibro.save().then(resultado => {
         res.redirect("/libros");
     }).catch(error => {
-        let errores = Object.keys(error.errors);
+        /* Este trozo de código comentado se puede usar si queremos que los errores aparezcan todos juntos en la plantilla error.
+        En es caso aparte de este código pondríamos:
+        res.render('error', {error: mensaje});
+        */
+        /*let errores = Object.keys(error.errors);
         let mensaje = "";
         if(errores.length > 0) {
             errores.forEach(clave => {
@@ -73,8 +77,17 @@ router.post("/libros", upload.single("portada"), (req, res) => {
             });
         } else {
             mensaje = "Error añadiendo libro";
+        }*/
+        let errores = {
+            general: 'Error insertando libros'
+          };
+        if(error.errors.titulo) {
+            errores.titulo = error.errors.titulo.message;
         }
-        res.render('error', {error: mensaje});
+        if(error.errors.precio) {
+            errores.precio = error.errors.precio.message;
+        }
+        res.render("libros_nuevo", {errores: errores, datos: req.body});
     });
 });
 

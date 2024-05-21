@@ -8,21 +8,28 @@
     
     <form action="/libros" method="post" enctype="multipart/form-data">
         <div class="form-group">
+            
             <label>Titulo:
+                {% if errores.titulo %}
+                    <br> <span class="text-danger">{{ errores.titulo }}</span><br>
+                {% endif %}
                 <input type="text" class="form-control" name="titulo"
-                placeholder="Titulo del libro...">
+                placeholder="Titulo del libro..." value = {{ datos.titulo}}>
             </label>
         </div>
         <div class="form-group">
             <label>Editorial:
                 <input type="text" class="form-control" name="editorial"
-                placeholder="Editorial del libro...">
+                placeholder="Editorial del libro..." value = {{ datos.editorial}}>
             </label>
         </div>
         <div class="form-group">
             <label>Precio:
+                {% if errores.precio %}
+                    <br> <span class="text-danger">{{ errores.precio }}</span><br>
+                {% endif %}
                 <input type="number" class="form-control" name="precio"
-                placeholder="Precio del libro...">
+                placeholder="Precio del libro..." value = {{ datos.precio}}>
             </label>
         </div>
         <div class="form-group">
