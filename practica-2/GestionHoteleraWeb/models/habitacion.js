@@ -14,6 +14,10 @@ let incidenciaSchema = new mongoose.Schema({
     },
     fechaFin: {
         type: Date
+    },
+    imagen: {
+        type: String,
+        trim: true
     }
 });
 
@@ -44,7 +48,12 @@ let habitacionSchema = new mongoose.Schema({
         required: true,
         min: 0,
         max: 250
-    }, // Subdocumento del modelo habitaciones
+    },
+    imagen: {
+        type: String,
+        trim: true
+    },
+    // Subdocumento del modelo habitaciones
     incidencias: [incidenciaSchema]
 });
 
