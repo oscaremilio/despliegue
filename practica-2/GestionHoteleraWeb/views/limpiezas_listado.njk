@@ -11,7 +11,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <p class="card-text">{{ limpieza.fechaHora | date("DD/MM/YYYY") }}</p>
-                                {% if habitacion.incidencias.observaciones and habitacion.incidencias.observaciones.length > 0 %}
+                                {% if limpieza.observaciones %}
                                     <p class="card-text">Observaciones: {{ limpieza.observaciones }}</p>
                                 {% else %}
                                     <p class="card-text">Sin observaciones</p>
