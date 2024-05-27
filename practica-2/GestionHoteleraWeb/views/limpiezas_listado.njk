@@ -1,0 +1,25 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Limpiezas | Listado{% endblock %}
+
+{% block contenido %}
+    <h1>Limpiezas de la habitación {{ habitacion.numero }}</h1>
+    <div class="container">
+        <div class="row">
+                {% for limpieza in limpiezas %}
+                    <div class="col-md-4 p-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">{{ limpieza.fechaHora | date("DD/MM/YYYY") }}</p>
+                                {% if habitacion.incidencias.observaciones and habitacion.incidencias.observaciones.length > 0 %}
+                                    <p class="card-text">Observaciones: {{ limpieza.observaciones }}</p>
+                                {% else %}
+                                    <p class="card-text">Sin observaciones</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+{% endblock %}

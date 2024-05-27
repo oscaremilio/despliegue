@@ -10,15 +10,24 @@ const router = express.Router();
 
 // Incorpora los modelos de datos
 const Limpieza = require(__dirname + "/../models/limpieza.js");
+const Habitacion = require(__dirname + "/../models/habitacion.js");
 
 // Obtener limpiezas de una habitación
 router.get("/limpiezas/:id", async (req, res) => {
-    Limpieza.find({ idHabitacion: req.params.id }).sort('-fechaHora')
+    // Recupera los datos de la habitación con el id usado en limpiezas
+    const habitacion = await Habitacion.findById(req.params.id);
+    Limpieza.find({ idHabitacion: req.params.id })
+        .sort('-fechaHora')
         .then(resultado => {
-            res.status(200).send({ ok: true, resultado: resultado });
-        }).catch(error => {
-            res.status(500).send({ ok: false, error: "No hay limpiezas registradas para esa habitación" });
-        });
+        if (resultado.length > 0) {
+            // Coge datos de 2 colecciones y usar así el número de habitación
+            res.render("limpiezas_listado", {habitacion: habitacion, limpiezas: resultado});
+        } else {
+            res.render("error", {error: "Limpiezas no encontradas"});
+        }
+    }).catch(error => {
+        res.render("error", {error: "No hay limpiezas registradas para esa habitación"});
+    });
 });
 
 // Obtener el estado de limpieza actual de una habitación

@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const nunjucks = require('nunjucks');
+const dateFilter = require("nunjucks-date-filter");
 
 // Crea una instancia de Express
 app = express();
@@ -15,10 +16,13 @@ const Usuario = require(__dirname + "/models/usuario");
 mongoose.connect("mongodb://127.0.0.1:27017/hotel");
 
 // Configura el motor Nunjucks
-nunjucks.configure('views', {
+const env = nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
+
+// Añade el filtro de la fecha
+env.addFilter("date", dateFilter);
 
 // Asigna el motor de plantillas
 app.set('view engine', 'njk');
@@ -30,8 +34,6 @@ app.use(express.static('public'));
 const habitaciones = require(__dirname + "/routes/habitaciones.js");
 const limpiezas = require(__dirname + "/routes/limpiezas.js");
 const usuarios = require(__dirname + "/routes/usuarios.js");
-
-
 
 // Middleware para peticiones
 app.use(express.json());

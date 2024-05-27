@@ -18,6 +18,7 @@ const Limpieza = require(__dirname + "/../models/limpieza.js");
 router.get("/habitaciones", (req, res) => {
     Habitacion.find()
         .populate("incidencias")
+        .sort("numero")
         .then( resultado => {
             res.render("habitaciones_listado", {habitaciones: resultado});
     }).catch(error => {
@@ -26,28 +27,20 @@ router.get("/habitaciones", (req, res) => {
 });
 
 // Obtiene los detalles de una habitación concreta por su id
-router.get('/habitaciones/:id', (req, res) => {
+router.get("/habitaciones/:id", (req, res) => {
     Habitacion.findById(req.params.id).then(resultado => {
-        if (resultado)
-            res.status(200)
-                .send({ ok: true, resultado: resultado });
-        else
-            res.status(400)
-                .send({
-                    ok: false,
-                    error: "No se han encontrado habitaciones"
-                });
+        if (resultado) {
+            res.render("habitaciones_ficha", {habitacion: resultado}); 
+        } else {
+            res.render("error", {error: "Habitacion no encontrada"});
+        }
     }).catch(error => {
-        res.status(400)
-            .send({
-                ok: false,
-                error: "No existe el número de habitación"
-            });
+        res.render("error", {error: "No existe el número de la habitación"});
     });
 });
 
 // Añade una habitación al listado
-router.post('/habitaciones', (req, res) => {
+router.post("/habitaciones", (req, res) => {
 
     let nuevaHabitacion = new Habitacion({
         numero: req.body.numero,
@@ -70,7 +63,7 @@ router.post('/habitaciones', (req, res) => {
 });
 
 // Actualiza los datos de una habitación
-router.put('/habitaciones/:id', (req, res) => {
+router.put("/habitaciones/:id", (req, res) => {
 
     Habitacion.findByIdAndUpdate(req.params.id, {
         $set: {
@@ -96,7 +89,7 @@ router.put('/habitaciones/:id', (req, res) => {
 });
 
 // Elimina una habitación
-router.delete('/habitaciones/:id', (req, res) => {
+router.delete("/habitaciones/:id", (req, res) => {
 
     Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {
@@ -115,7 +108,7 @@ router.delete('/habitaciones/:id', (req, res) => {
 });
 
 // Añade una incidencia en una habitación
-router.post('/habitaciones/:id/incidencias', async (req, res) => {
+router.post("/habitaciones/:id/incidencias", async (req, res) => {
 
     let habitacion = await Habitacion.findById(req.params.id);
     habitacion.incidencias.push({descripcion: req.body.descripcion});

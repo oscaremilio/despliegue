@@ -1,0 +1,26 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Ficha{% endblock %}
+
+{% block contenido %}
+
+    <h1>Ficha de habitación {{ habitacion.numero }}</h1>
+    <p>Tipo: {{ habitacion.tipo }} - <strong>Precio: {{ habitacion.precio }} €/noche</strong></p>
+    <p> {{ habitacion.descripcion }}</p>
+    {% if habitacion.incidencias and habitacion.incidencias.length > 0 %}
+        <h2>Incidencias</h2>
+        {% for incidencia in habitacion.incidencias %}
+            <div class=card" style="width: 100%;">
+                <div class="shadow-sm border rounded mb-1">
+                    <p> ({{ incidencia.fechaInicio | date("DD/MM/YYYY") }}) - ({{ incidencia.fechaFin | date("DD/MM/YYYY") }})</p>
+                    <p> {{ incidencia.descripcion }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2>Incidencias</h2>
+        <p>No hay incidencias registradas para esta habitación.</p>
+    {% endif %}
+    <h2>Limpiezas</h2>
+    <a href="/limpiezas/{{ habitacion.id }}" class="btn btn-primary">Ver ficha</a>
+{% endblock %}
