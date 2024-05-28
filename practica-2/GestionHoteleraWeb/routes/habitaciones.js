@@ -5,9 +5,24 @@ que comiencen por "/habitaciones"
 
 // Añade las librerías necesarias
 const express = require("express");
+const mongoose= require("mongoose");
+const multer = require("multer");
 
 // Enrutador
 const router = express.Router();
+
+// Configura los parámetros de subida de archivos y almacenamiento
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+// El middleware multer hace uso del almacenamiento
+let upload = multer({ storage: storage });
 
 // Incorpora los modelos de datos
 // Añade limpieza.js para el servicio put("/habitaciones/:id/ultimalimpieza"
@@ -26,6 +41,11 @@ router.get("/habitaciones", (req, res) => {
     });
 });
 
+// Crea un servicio GET que renderiza el formulario que crea una habitación
+router.get("/habitaciones/nueva", (req, res)=> {
+    res.render("habitaciones_nueva");
+});
+
 // Obtiene los detalles de una habitación concreta por su id
 router.get("/habitaciones/:id", (req, res) => {
     Habitacion.findById(req.params.id).then(resultado => {
@@ -40,26 +60,44 @@ router.get("/habitaciones/:id", (req, res) => {
 });
 
 // Añade una habitación al listado
-router.post("/habitaciones", (req, res) => {
+router.post("/habitaciones", upload.single("imagen"), async (req, res) => {
+    let habitacionExiste = await Habitacion.findOne({numero: req.body.numero});
+    if (habitacionExiste) {
+        let errores = {general: "Ya existe una habitación con este número"};
+            res.render("habitaciones_nueva", {errores: errores, datos: req.body});
+        console.log(habitacionExiste);
+    } else {
+        let imagen = req.file ? req.file.filename : "";
+        let nuevaHabitacion = new Habitacion({
+            numero: req.body.numero,
+            tipo: req.body.tipo,
+            descripcion: req.body.descripcion,
+            ultimaLimpieza: req.body.ultimaLimpieza,
+            precio: req.body.precio,
+            imagen: imagen
+        });
+        nuevaHabitacion.save().then(resultado => {
+            res.redirect("/habitaciones");
+        }).catch(error => {
+            let errores = {
+                general: "Error insertando habitación"
+            };
+            if(error.errors.numero) {
+                errores.numero = error.errors.numero.message;
+            }
+            if(error.errors.tipo) {
+                errores.tipo = error.errors.tipo.message;
+            }
+            if(error.errors.descripcion) {
+                errores.descripcion = error.errors.descripcion.message;
+            }
+            if(error.errors.precio) {
+                errores.precio = error.errors.precio.message;
+            }
+            res.render("habitaciones_nueva", {errores: errores, datos: req.body});
 
-    let nuevaHabitacion = new Habitacion({
-        numero: req.body.numero,
-        tipo: req.body.tipo,
-        descripcion: req.body.descripcion,
-        ultimaLimpieza: req.body.ultimaLimpieza,
-        precio: req.body.precio
-    });
-
-    nuevaHabitacion.save().then(resultado => {
-        res.status(200)
-            .send({ ok: true, resultado: resultado });
-    }).catch(error => {
-        res.status(400)
-            .send({
-                ok: false,
-                error: "Error insertando la habitación"
-            });
-    });
+        });
+    }
 });
 
 // Actualiza los datos de una habitación

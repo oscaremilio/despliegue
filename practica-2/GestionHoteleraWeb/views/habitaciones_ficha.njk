@@ -5,6 +5,11 @@
 {% block contenido %}
 
     <h1>Ficha de habitación {{ habitacion.numero }}</h1>
+    {% if habitacion.imagen %}
+        <div class="text-center">
+            <img src="/uploads/{{ habitacion.imagen }}" class="img-fluid" alt="Imagen de la habitación {{ habitacion.numero }}" width="320" height="240">
+        </div>
+        {% endif %}
     <p>Tipo: {{ habitacion.tipo }} - <strong>Precio: {{ habitacion.precio }} €/noche</strong></p>
     <p> {{ habitacion.descripcion }}</p>
     {% if habitacion.incidencias and habitacion.incidencias.length > 0 %}

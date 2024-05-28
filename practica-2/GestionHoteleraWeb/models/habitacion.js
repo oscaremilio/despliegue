@@ -41,7 +41,7 @@ let habitacionSchema = new mongoose.Schema({
     ultimaLimpieza: {
         type: Date,
         required: true,
-        deafult: Date.now,
+        default: Date.now,
     },
     precio: {
         type: Number,
