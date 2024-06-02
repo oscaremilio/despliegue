@@ -12,6 +12,12 @@ const router = express.Router();
 const Limpieza = require(__dirname + "/../models/limpieza.js");
 const Habitacion = require(__dirname + "/../models/habitacion.js");
 
+// Crea un servicio GET que renderiza el formulario que crea una limpieza
+router.get("/limpiezas/nueva/:id", async (req, res)=> {
+    const habitacion = await Habitacion.findById(req.params.id);
+    res.render("limpiezas_nueva", {habitacion: habitacion});
+});
+
 // Obtener limpiezas de una habitación
 router.get("/limpiezas/:id", async (req, res) => {
     // Recupera los datos de la habitación con el id usado en limpiezas
@@ -55,21 +61,19 @@ router.get("/limpiezas/:id/estadolimpieza", async (req, res) => {
 });
 
 // Actualizar limpieza
-router.post("/limpiezas/:id", async (req, res) => {
-    let nuevaLimpieza = new Limpieza({
+router.post(`/limpiezas/:id`, async (req, res) => {
+
+    let nuevaLimpieza = await  new Limpieza({
         idHabitacion: req.params.id,
+        fechaHora: req.body.fechaHora,
         observaciones: req.body.observaciones
     });
 
     nuevaLimpieza.save().then(resultado => {
-        res.status(200)
-            .send({ ok: true, resultado: resultado });
+        res.redirect(`/limpiezas/${req.params.id}`);
+        console.log(resultado);
     }).catch(error => {
-        res.status(400)
-            .send({
-                ok: false,
-                error: "Error actualizando limpieza"
-            });
+        res.render("error", {error: "Error insertando limpieza"});
     });
 });
 

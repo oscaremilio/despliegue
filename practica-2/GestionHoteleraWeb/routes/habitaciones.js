@@ -11,10 +11,19 @@ const multer = require("multer");
 // Enrutador
 const router = express.Router();
 
+// Expresión regular para asegurar la carpeta se añade la imagen subida
+const regex_incidencia = /^incidencia_.+/;
+const regex_habitacion = /^habitacion_.+/;
+
 // Configura los parámetros de subida de archivos y almacenamiento
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads')
+        if (regex_incidencia.test(file.originalname)) {
+            cb(null, 'public/uploads/incidencias')
+        }
+        if (regex_habitacion.test(file.originalname)) {
+            cb(null, 'public/uploads/habitaciones')
+        }
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -146,14 +155,16 @@ router.delete("/habitaciones/:id", (req, res) => {
 });
 
 // Añade una incidencia en una habitación
-router.post("/habitaciones/:id/incidencias", async (req, res) => {
+router.post("/habitaciones/:id/incidencias", upload.single("imagen"), async (req, res) => {
 
     let habitacion = await Habitacion.findById(req.params.id);
-    habitacion.incidencias.push({descripcion: req.body.descripcion});
-    habitacion.save().then(resultado => {
-        res.status(200).send({ ok: true, resultado: resultado });
-    }).catch(error => {
-        res.status(400).send({ok: false, error: "Error añadiendo la incidencia"});
+    let imagen = req.file ? req.file.filename : "";
+    habitacion.incidencias.push({descripcion: req.body.descripcionIncidencia, imagen: imagen});
+    await habitacion.save().then( resultado => {
+        res.render("habitaciones_ficha", {habitacion: resultado}); 
+    }).catch( error => {
+        console.log(error);
+        res.render("error", {error: "Error añadiendo la incidencia"});
     });
 });
 
