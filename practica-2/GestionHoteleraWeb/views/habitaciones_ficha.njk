@@ -12,6 +12,12 @@
         {% endif %}
     <p>Tipo: {{ habitacion.tipo }} - <strong>Precio: {{ habitacion.precio }} €/noche</strong></p>
     <p> {{ habitacion.descripcion }}</p>
+    <form action="/habitaciones/{{ habitacion._id}}/incidencias/{{ incidencia._id}}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit" class="btn btn-danger">
+            Borrar habitación
+        </button>
+    </form>
     <h2>Incidencias</h2>
    <form action="/habitaciones/{{ habitacion._id }}/incidencias" method="post" enctype="multipart/form-data">
         <div class="form-group">
@@ -34,7 +40,7 @@
         {% for incidencia in habitacion.incidencias %}
             <div class=card" style="width: 100%;">
                 <div class="shadow-sm border rounded mb-1">
-                    <p> ({{ incidencia.fechaInicio | date("DD/MM/YYYY") }})</p>
+                    <p> ({{ incidencia.fechaInicio | date("DD/MM/YYYY") }}</p>
                     
                     {% if incidencia.imagen %}
                         <div class="text-center">
@@ -42,6 +48,17 @@
                         </div>
                     {% endif %}
                     <p> {{ incidencia.descripcion }}</p>
+                    {% if incidencia.fechaFin %}
+                        <p class="text-success">Cerrada el {{ incidencia.fechaFin | date("DD/MM/YYYY") }}</p>
+                    {% else %}
+                        <form action="/habitaciones/{{ habitacion._id}}/incidencias/{{ incidencia._id}}" method="post">
+                            <input type="hidden" name="_method" value="put">
+                            <button type="submit" class="btn btn-danger">
+                                Cerrar
+                            </button>
+                        </form>
+                    {% endif %}
+
                 </div>
             </div>
         {% endfor %}

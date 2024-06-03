@@ -159,11 +159,11 @@ router.post("/habitaciones/:id/incidencias", upload.single("imagen"), async (req
 
     let habitacion = await Habitacion.findById(req.params.id);
     let imagen = req.file ? req.file.filename : "";
-    habitacion.incidencias.push({descripcion: req.body.descripcionIncidencia, imagen: imagen});
+    let fechaFin = "";
+    habitacion.incidencias.push({descripcion: req.body.descripcionIncidencia, fechaFin: fechaFin, imagen: imagen});
     await habitacion.save().then( resultado => {
         res.render("habitaciones_ficha", {habitacion: resultado}); 
     }).catch( error => {
-        console.log(error);
         res.render("error", {error: "Error añadiendo la incidencia"});
     });
 });
@@ -172,11 +172,14 @@ router.post("/habitaciones/:id/incidencias", upload.single("imagen"), async (req
 router.put("/habitaciones/:idH/incidencias/:idI", async (req, res) => {
     let habitacion = await Habitacion.findById(req.params.idH);
     let incidencia = habitacion.incidencias.filter(i => i._id == req.params.idI);
-    incidencia[0].fechaFin = Date.now();
+    incidencia[0].fechaFin = Date.now();;
     habitacion.save().then(resultado => {
-        res.status(200).send({ ok: true, resultado: resultado });
+        res.render("habitaciones_ficha", {habitacion: resultado});
+        //res.status(200).send({ ok: true, resultado: resultado });
     }).catch(error => {
-        res.status(400).send({ ok: false, error: "Incidencia no encontrada"});
+        console.log(error);
+        res.render("error", {error: "Error añadiendo la incidencia"});
+        //res.status(400).send({ ok: false, error: "Incidencia no encontrada"});
     });
 });
 
