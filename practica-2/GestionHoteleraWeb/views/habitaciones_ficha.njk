@@ -12,7 +12,7 @@
         {% endif %}
     <p>Tipo: {{ habitacion.tipo }} - <strong>Precio: {{ habitacion.precio }} €/noche</strong></p>
     <p> {{ habitacion.descripcion }}</p>
-    <form action="/habitaciones/{{ habitacion._id}}/incidencias/{{ incidencia._id}}" method="post">
+    <form action="/habitaciones/{{ habitacion._id}}" method="post">
         <input type="hidden" name="_method" value="delete">
         <button type="submit" class="btn btn-danger">
             Borrar habitación

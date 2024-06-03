@@ -140,17 +140,20 @@ router.delete("/habitaciones/:id", (req, res) => {
 
     Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {
-            if (resultado) {
+            res.redirect("/habitaciones");
+            /*if (resultado) {
                 res.status(200).send({ ok: true, resultado: resultado });
             } else {
                 res.status(400).send({ ok: false, error: "Error eliminando la habitación" });
-            }
+            }*/
         }).catch(error => {
+            res.render("error", {error: "Error borrando habitación"})
+            /*
             res.status(400)
                 .send({
                     ok: false,
                     error: "Error eliminando la habitación"
-                });
+                });*/
         });
 });
 
