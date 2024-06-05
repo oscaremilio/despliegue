@@ -5,6 +5,9 @@
 {% block contenido %}
 
     <h1>Listado de habitaciones</h1>
+    {%if habitaciones.length === 0 %}
+        <p class="text-info">No hay habitaciones en el listado</p>
+    {% endif %}
     <div class="container">
         <div class="row">
         {% for habitacion in habitaciones %}

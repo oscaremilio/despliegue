@@ -61,18 +61,21 @@ router.get("/limpiezas/:id/estadolimpieza", async (req, res) => {
 });
 
 // Actualizar limpieza
-router.post(`/limpiezas/:id`, async (req, res) => {
+router.post("/limpiezas/:id", async (req, res) => {
+    let habitacion = await Habitacion.findById(req.params.id);
 
-    let nuevaLimpieza = await  new Limpieza({
+    let nuevaLimpieza = await new Limpieza({
         idHabitacion: req.params.id,
         fechaHora: req.body.fechaHora,
         observaciones: req.body.observaciones
     });
 
     nuevaLimpieza.save().then(resultado => {
-        res.redirect(`/limpiezas/${req.params.id}`);
-        console.log(resultado);
+        //res.redirect(`/limpiezas/${req.params.id}`);
+        //res.render("/limpiezas/:id", {limpieza: resultado});
+        res.redirect("/limpiezas/" + habitacion._id)
     }).catch(error => {
+        console.log(error);
         res.render("error", {error: "Error insertando limpieza"});
     });
 });

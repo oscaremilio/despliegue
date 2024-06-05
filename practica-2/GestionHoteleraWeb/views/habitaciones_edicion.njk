@@ -1,0 +1,74 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Edición{% endblock %}
+
+{% block contenido %}
+    {% if errores.general%}
+        <br> <span class="text-danger">{{ errores.general }}</span><br>
+    {% endif %}
+    <h1>Modificar habitación {{ habitacion.numero}}</h1>
+    
+    <form action="/habitaciones/editar/{{ habitacion._id }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Número de habitación:</label>
+                {% if errores.numero %}
+                    <br> <span class="text-danger">{{ errores.numero }}</span><br>
+                {% endif %}
+                <input type="number" class="form-control" name="numero"
+                placeholder="Número de habitación..." value = {{ habitacion.numero}}>
+        </div>
+        <div class="form-group">
+            <label>Tipo:</label>
+            {% if errores.tipo %}
+                    <br> <span class="text-danger">{{ errores.tipo }}</span><br>
+                {% endif %}
+            <select class="form-control" name="tipo">
+                <option value="">- Selecione el tipo de habitación -</option>
+                <option value="individual" 
+                    {% if (habitacion.tipo) === "individual" %}
+                        selected
+                    {% endif %}>individual</option>
+                <option value="doble"
+                    {% if (habitacion.tipo) === "doble" %}
+                        selected
+                    {% endif %}>doble</option>
+                <option value="familiar"
+                    {% if (habitacion.tipo) === "familiar" %}
+                        selected
+                    {% endif %}>familiar</option>
+                <option value="suite"
+                    {% if (habitacion.tipo) === "suite" %}
+                        selected
+                    {% endif %}>suite</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Precio:</label>
+                {% if errores.precio %}
+                    <br> <span class="text-danger">{{ errores.precio }}</span><br>
+                {% endif %}
+                <input type="number" step="0.01" class="form-control" name="precio"
+                placeholder="Precio de la habitación..." value = {{ habitacion.precio }}>
+        </div>
+        <div class="form-group">
+            <label>Descripción:</label>
+                {% if errores.descripcion %}
+                    <br> <span class="text-danger">{{ errores.descripcion }}</span><br>
+                {% endif %}
+                <textarea class="form-control" name="descripcion" rows="10" cols="50">{{ habitacion.descripcion}}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Imagen:</label>
+                {% if habitacion.imagen %}
+                    <div>
+                        <img src="/uploads/habitaciones/{{ habitacion.imagen }}" alt="Imagen de la habitación {{ habitacion.numero }}" width="220" height="140">
+                    </div>
+                {% endif %}
+                <input type="file" class="form-control" name="imagen">
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Enviar
+        </button>
+    </form>
+
+{% endblock %}

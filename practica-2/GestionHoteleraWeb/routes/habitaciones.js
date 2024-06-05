@@ -50,6 +50,20 @@ router.get("/habitaciones", (req, res) => {
     });
 });
 
+// Añade el servicio para renderizar un formulario de un libro y actualizarlo
+router.get("/habitaciones/editar/:id", (req, res) => {
+    //res.render("habitaciones_edicion");
+    Habitacion.findById(req.params.id).then(resultado => {
+        if (resultado) {
+            res.render('habitaciones_edicion', {habitacion: resultado});
+        } else {
+            res.render('error', {error: "Habitación no encontrada"});
+        }
+    }).catch(error => {
+        res.render('error', {error: "Habitación no encontrada"});
+    });
+});
+
 // Crea un servicio GET que renderiza el formulario que crea una habitación
 router.get("/habitaciones/nueva", (req, res)=> {
     res.render("habitaciones_nueva");
@@ -110,50 +124,51 @@ router.post("/habitaciones", upload.single("imagen"), async (req, res) => {
 });
 
 // Actualiza los datos de una habitación
-router.put("/habitaciones/:id", (req, res) => {
-
+router.post("/habitaciones/editar/:id", upload.single("imagen"), (req, res) => {
+    let imagen = req.file ? req.file.filename : "";
     Habitacion.findByIdAndUpdate(req.params.id, {
         $set: {
             numero: req.body.numero,
             tipo: req.body.tipo,
             descripcion: req.body.descripcion,
-            ultimaLimpieza: req.body.ultimaLimpieza,
-            precio: req.body.precio
+            precio: req.body.precio,
+            imagen: imagen
         }
-    }, { new: true, runValidators: true}).then(resultado => {
-        if (resultado) {
-            res.status(200).send({ ok: true, resultado: resultado });
-        } else {
-            res.status(400).send({ ok: false, error: "Error actualizando los datos de la habitación" });
-        }
+    }, {new: true}).then(resultado => {
+        res.redirect("/habitaciones"); 
     }).catch(error => {
-        res.status(400)
-            .send({
-                ok: false,
-                error: "Error actualizando los datos de la habitación"
-            });
+        let errores = {
+            general: "Error insertando habitación"
+        };
+        if(error.errors.numero) {
+            errores.numero = error.errors.numero.message;
+        }
+        if(error.errors.tipo) {
+            errores.tipo = error.errors.tipo.message;
+        }
+        if(error.errors.descripcion) {
+            errores.descripcion = error.errors.descripcion.message;
+        }
+        if(error.errors.precio) {
+            errores.precio = error.errors.precio.message;
+        }
+        res.render("habitaciones_nueva", {errores: errores, datos: req.body});
+
     });
 });
 
 // Elimina una habitación
-router.delete("/habitaciones/:id", (req, res) => {
+router.delete("/habitaciones/:id", async (req, res) => {
+
+    let habitacionId = req.params.id;
+
+    await Limpieza.deleteMany({habitacionId: habitacionId});
 
     Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {
             res.redirect("/habitaciones");
-            /*if (resultado) {
-                res.status(200).send({ ok: true, resultado: resultado });
-            } else {
-                res.status(400).send({ ok: false, error: "Error eliminando la habitación" });
-            }*/
         }).catch(error => {
-            res.render("error", {error: "Error borrando habitación"})
-            /*
-            res.status(400)
-                .send({
-                    ok: false,
-                    error: "Error eliminando la habitación"
-                });*/
+            res.render("error", {error: "Error eliminando habitación"})
         });
 });
 
