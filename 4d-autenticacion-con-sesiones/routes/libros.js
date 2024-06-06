@@ -2,7 +2,7 @@
 const express = require("express");
 const mongoose= require("mongoose");
 const multer = require("multer");
-const auth = require(__dirname + "/../utils/auth.js");
+const autenticacion = require(__dirname + "/../index");
 const router = express.Router();
 
 // Configura los parámetros de subida de archivos y almacenamiento
@@ -33,7 +33,7 @@ router.get("/libros", (req, res) => {
 });
 
 // Crea un servicio GET que renderiza el formulario que crea un libro nuevo
-router.get("/libros/nuevo/libro", (req, res)=> {
+router.get("/libros/nuevo/libro", autenticacion, (req, res)=> {
     res.render("libros_nuevo");
 })
 
@@ -54,7 +54,7 @@ router.get("/libros/:id", (req, res) => {
 });
 
 // Añade el servicio POST para insertar un nuevo libro con datos del formulario
-router.post("/libros", upload.single("portada"), (req, res) => {
+router.post("/libros", upload.single("portada"), autenticacion, (req, res) => {
     let portada = req.file ? req.file.filename : '';
     let nuevoLibro = new Libro({
         titulo: req.body.titulo,
@@ -92,7 +92,7 @@ router.post("/libros", upload.single("portada"), (req, res) => {
 });
 
 // Añade el servicio DELETE para borrar un libro por su id
-router.delete("/libros/:id", (req, res) => {
+router.delete("/libros/:id", autenticacion, (req, res) => {
     Libro.findByIdAndDelete(req.params.id).then(resultado => {
             res.redirect("/libros"); 
         }).catch(error => {
@@ -101,7 +101,7 @@ router.delete("/libros/:id", (req, res) => {
 });
 
 // Añade el servicio para renderizar un formulario de un libro y actualizarlo
-router.get("/libros/editar/:id", (req, res) => {
+router.get("/libros/editar/:id", autenticacion, (req, res) => {
     Libro.findById(req.params.id).then(resultado => {
         if (resultado) {
             res.render('libros_editar', {libro: resultado});
@@ -114,7 +114,7 @@ router.get("/libros/editar/:id", (req, res) => {
 });
 
 // Añade el servicio PUT en base al formulario recibido del libro en concreto
-router.post("/libros/:id", upload.single("portada"), (req, res) => {
+router.post("/libros/:id", upload.single("portada"), autenticacion, (req, res) => {
     let portada = req.file ? req.file.filename : req.body.portada;
     Libro.findByIdAndUpdate(req.params.id, {
         $set: {

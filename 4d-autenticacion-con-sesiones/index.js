@@ -1,11 +1,30 @@
 // Librerías
 const express = require('express');
+const session = require("express-session");
 const mongoose = require('mongoose');
 const nunjucks = require('nunjucks');
 const methodOverride = require("method-override");
 
+const usuarios = [
+    {usuario: "fernando", password: "fernando12345"},
+    {usuario: "oscar", password: "oscar12345"}
+];
+
+let autenticacion = (req, res, next) => {
+    if (req.session && req.session.usuario)
+    return next();
+    else
+    res.render('login');
+};
+
 // Servidor Express
 let app = express();
+
+app.use(session({
+    secret: "1234",
+    resave: true,
+    saveUninitialized: false
+}));
 
 // Uso de urlencoded (antes de methodOverride siempre)
 app.use(express.urlencoded({ extended: true }));

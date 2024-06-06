@@ -1,5 +1,5 @@
 {
-  "name": "ejericicio-4c-parte3-validaciones-librosweb-v4",
+  "name": "ejericicio-1-pdf-4d-autenticacion-por-sesiones",
   "version": "1.0.0",
   "description": "Libros, formularios, subida de arhivos",
   "main": "index.js",
@@ -12,6 +12,7 @@
     "bootstrap": "^5.3.3",
     "chokidar": "^3.6.0",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.3.2",
