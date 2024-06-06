@@ -70,9 +70,10 @@ router.post("/limpiezas/:id", async (req, res) => {
         observaciones: req.body.observaciones
     });
 
-    nuevaLimpieza.save().then(resultado => {
-        //res.redirect(`/limpiezas/${req.params.id}`);
-        //res.render("/limpiezas/:id", {limpieza: resultado});
+    nuevaLimpieza.save().then( async resultado => {
+        let limpiezas = await Limpieza.find({habitacion: req.params.id}).sort(-fechaHora);
+        habitacion.ultimaLimpieza = limpiezas[0].fechaHora;
+        await habitacion.save();
         res.redirect("/limpiezas/" + habitacion._id)
     }).catch(error => {
         console.log(error);

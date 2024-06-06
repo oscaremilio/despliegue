@@ -8,8 +8,7 @@
     <form action="/limpiezas/{{ habitacion._id }}" method="post">
         <div class="form-group">
             <label>Fecha de limpieza:</label>
-                <input type="date" class="form-control" name="fechaHora" value="{{limpieza.fechaHora | date("DD/MM/YYYY")}}"/>
-                <p>{{limpieza.fechaHora | date("DD/MM/YYYY")}}</P>
+                <input type="date" class="form-control" name="fechaHora" value="{{limpieza.fechaHora | date("YYYY-MM-DD")}}"/>
         </div>
         <div class="form-group">
             <label>Observaciones:</label>
