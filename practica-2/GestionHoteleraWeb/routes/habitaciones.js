@@ -160,9 +160,9 @@ router.post("/habitaciones/editar/:id", upload.single("imagen"), (req, res) => {
 // Elimina una habitación
 router.delete("/habitaciones/:id", async (req, res) => {
 
-    let habitacionId = req.params.id;
+    let idHabitacion = req.params.id;
 
-    await Limpieza.deleteMany({habitacionId: habitacionId});
+    await Limpieza.deleteMany({idHabitacion: idHabitacion});
 
     Habitacion.findByIdAndDelete(req.params.id)
         .then(resultado => {

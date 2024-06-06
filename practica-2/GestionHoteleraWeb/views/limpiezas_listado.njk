@@ -4,7 +4,7 @@
 
 {% block contenido %}
     <h1>Limpiezas de la habitación {{ habitacion.numero }}</h1>
-    <a href="/limpiezas/nueva"" class="btn btn-primary">Nueva limpieza</a>
+    <a href="/limpiezas/nueva/{{ habitacion._id }}" class="btn btn-primary">Nueva limpieza</a>
     <div class="container">
         <div class="row">
                 {% for limpieza in limpiezas %}
