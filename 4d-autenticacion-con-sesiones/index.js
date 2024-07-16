@@ -21,7 +21,8 @@ let app = express();
 app.use(session({
     secret: "1234",
     resave: true,
-    saveUninitialized: false
+    saveUninitialized: false,
+    expires: new Date(Date.now() + (360 * 60 * 1000))
 }));
 
 // Para poder acceder a la sesión desde las vistas
