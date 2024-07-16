@@ -5,11 +5,6 @@ const mongoose = require('mongoose');
 const nunjucks = require('nunjucks');
 const methodOverride = require("method-override");
 
-const usuarios = [
-    {usuario: "fernando", password: "fernando12345"},
-    {usuario: "oscar", password: "oscar12345"}
-];
-
 let autenticacion = (req, res, next) => {
     if (req.session && req.session.usuario)
     return next();
@@ -17,14 +12,23 @@ let autenticacion = (req, res, next) => {
     res.render('login');
 };
 
+module.exports = autenticacion;
+
 // Servidor Express
 let app = express();
 
+// Configura la sesión
 app.use(session({
     secret: "1234",
     resave: true,
     saveUninitialized: false
 }));
+
+// Para poder acceder a la sesión desde las vistas
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+    });
 
 // Uso de urlencoded (antes de methodOverride siempre)
 app.use(express.urlencoded({ extended: true }));
@@ -42,7 +46,7 @@ app.use(methodOverride(function (req, res) {
 app.use(express.static('public'));
 
 // Enrutadores
-const auth = require(__dirname + '/routes/auth');
+const login = require(__dirname + '/routes/login');
 const libros = require(__dirname + '/routes/libros');
 
 // Conexión con la BD
@@ -66,6 +70,8 @@ app.use(express.json());
 
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use('/', libros);
+app.use('/', login);
 
 // Puesta en marcha del servidor
 app.listen(8080);
+

@@ -3,13 +3,13 @@
 {% block contenido %}
     <h1>Login</h1>
 
-    {% if (error) %}
+    {% if error %}
         <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
 
     <form action="/login" method="post">
         <div class="form-group">
-            <label for="nombre">Usuario:</label>
+            <label for="login">Usuario:</label>
             <input type="text" class="form-control" name="login"
              placeholder="Login del usuario..." />
         </div>

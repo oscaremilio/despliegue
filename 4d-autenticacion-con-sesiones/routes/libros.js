@@ -23,8 +23,8 @@ const Libro = require(__dirname + "/../models/libro.js");
 // Crea un servicio GET que renderiza el listado completo de libros
 router.get("/libros", (req, res) => {
         Libro.find()
-        .populate("autor")
-        .populate("comentarios")
+        /*.populate("autor")
+        .populate("comentarios")*/
         .then( resultado => {
             res.render("libros_listado", {libros: resultado});
     }).catch(error => {
